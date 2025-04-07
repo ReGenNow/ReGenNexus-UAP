@@ -15,7 +15,7 @@ ReGenNexus Core is an open-source implementation of the Universal Agent Protocol
 
 ```bash
 # Clone the repository
-git clone https://github.com/ReGenNow/ReGenNexus.git
+git clone https://github.com/ReGenNow/ReGenNexus-UAP.git
 cd ReGenNexus
 
 # Install dependencies
