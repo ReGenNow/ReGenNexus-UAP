@@ -1,0 +1,26 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Copy core protocol files
+COPY src/protocol /app/regennexus/protocol
+COPY src/registry /app/regennexus/registry
+COPY src/context /app/regennexus/context
+COPY src/security /app/regennexus/security
+
+# Copy setup files
+COPY setup.py /app/
+COPY requirements.txt /app/
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -e .
+
+# Copy examples
+COPY examples /app/examples
+
+# Set Python path
+ENV PYTHONPATH=/app
+
+# Default command runs a simple example
+CMD ["python", "examples/simple_connection/basic_protocol_example.py"]

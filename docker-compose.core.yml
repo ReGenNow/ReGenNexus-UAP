@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  regennexus-core:
+    build:
+      context: .
+      dockerfile: Dockerfile.core
+    volumes:
+      - ./examples:/app/examples
+    environment:
+      - PYTHONPATH=/app
+    command: python examples/simple_connection/basic_protocol_example.py
