@@ -2,6 +2,8 @@
 
 ReGenNexus Core is an open-source implementation of the Universal Agent Protocol (UAP) developed by ReGen Designs LLC. It provides a standardized communication framework for digital entities to interact seamlessly.
 
+![ReGenNexus Logo](src/images/RegenNexus.png)
+
 ## Core Features
 
 - **Message Protocol**: Standardized message format for entity communication
