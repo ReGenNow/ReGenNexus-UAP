@@ -1,0 +1,30 @@
+FROM python:3.9-slim
+
+LABEL maintainer="ReGen Designs LLC"
+LABEL description="ReGenNexus Core Demo Client"
+LABEL version="0.1.1"
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up working directory
+WORKDIR /app
+
+# Copy client code
+COPY . .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV REGENNEXUS_SERVER=regennexus:8000
+
+# Create a non-root user
+RUN useradd -m regennexus
+USER regennexus
+
+# Command to run the client
+CMD ["python", "basic_protocol_example.py"]

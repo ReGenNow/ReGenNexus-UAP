@@ -1,6 +1,6 @@
 # Contributing to ReGenNexus UAP Core
 
-Thank you for your interest in contributing to the ReGenNexus Universal Agent Protocol (UAP) Core! This document provides guidelines for contributing to the open-source core protocol.
+Thank you for your interest in contributing to the ReGenNexus Universal Adapter Protocol (UAP) Core! This document provides guidelines for contributing to the open-source core protocol.
 
 ## Focus Areas for Community Contributions
 
@@ -11,27 +11,23 @@ We especially welcome contributions in these areas:
    - Protocol specification improvements
    - Message format extensions
    - Security enhancements
-   - Scalability improvements
 
 2. **Documentation and Examples**
    - Improved documentation
    - Additional usage examples
    - Tutorials and guides
    - Code comments
-   - Community showcases
 
 3. **Testing and Validation**
    - Unit tests
    - Integration tests
    - Benchmarking tools
    - Validation utilities
-   - Stress testing
 
 4. **Platform Support**
    - Language bindings
    - Cross-platform compatibility
    - Environment-specific optimizations
-   - Containerization improvements
 
 ## Contribution Process
 
@@ -68,14 +64,12 @@ We especially welcome contributions in these areas:
 - Include docstrings for all functions, classes, and modules
 - Use meaningful variable and function names
 - Keep functions focused on a single responsibility
-- Use type hints where appropriate
 
 ## Testing Requirements
 
 - Write unit tests for all new functionality
 - Ensure all tests pass before submitting a pull request
 - Aim for high test coverage
-- Include integration tests for complex features
 
 ## Documentation
 
@@ -83,14 +77,12 @@ We especially welcome contributions in these areas:
 - Document new features thoroughly
 - Use clear, concise language
 - Include examples where appropriate
-- Keep the README and getting started guides up to date
 
 ## Scope Guidelines
 
 The open-source core protocol focuses on the fundamental communication framework. When contributing, please respect these boundaries:
 
 ### In Scope for Core Protocol
-
 - Message protocol implementation
 - Entity registry system
 - Context management
@@ -98,28 +90,13 @@ The open-source core protocol focuses on the fundamental communication framework
 - Protocol versioning
 - Documentation and examples
 - Testing and validation
-- Performance optimizations
-- Cross-platform compatibility
 
 ### Out of Scope for Core Protocol
-
 - LLM integration (premium feature)
 - Connection Manager (premium feature)
 - Device Detection Framework (premium feature)
 - Advanced adapter generation
 - Application-specific implementations
-- Automated code generation features
-- Hardware-specific optimizations
-
-## Community Roadmap
-
-We maintain a public roadmap for the core protocol in the ROADMAP.md file. Before proposing major changes, please review this roadmap to understand:
-
-1. What features are planned for the core protocol
-2. What features are reserved for premium extensions
-3. The current priorities for development
-
-This helps ensure your contributions align with the project's direction and avoids duplicated effort.
 
 ## Getting Help
 

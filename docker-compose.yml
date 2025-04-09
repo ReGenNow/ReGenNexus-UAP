@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  regennexus:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: regennexus-core:0.1.1
+    container_name: regennexus-core
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+    environment:
+      - REGENNEXUS_SECURITY_LEVEL=2
+      - REGENNEXUS_LOG_LEVEL=INFO
+    restart: unless-stopped
+    networks:
+      - regennexus-network
+
+  # Optional: Add a simple demo client
+  demo-client:
+    build:
+      context: ./examples/simple_connection
+      dockerfile: Dockerfile.client
+    image: regennexus-demo-client:0.1.1
+    container_name: regennexus-demo-client
+    depends_on:
+      - regennexus
+    environment:
+      - REGENNEXUS_SERVER=regennexus:8000
+    networks:
+      - regennexus-network
+
+networks:
+  regennexus-network:
+    driver: bridge

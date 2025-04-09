@@ -1,14 +1,17 @@
 # Getting Started with ReGenNexus Core
 
-This guide will help you get started with the ReGenNexus Universal Agent Protocol (UAP) Core. The Core version provides the essential protocol features needed to build communication systems between digital entities.
+This guide will help you get started with ReGenNexus Core, an open-source implementation of the Universal Agent Protocol (UAP) for seamless communication between digital entities.
 
 ## Installation
 
 ### Prerequisites
-- Python 3.8 or higher
-- pip package manager
 
-### Install from Source
+- Python 3.8 or higher
+- pip (Python package installer)
+- Git (for cloning the repository)
+
+### Installing from GitHub
+
 ```bash
 # Clone the repository
 git clone https://github.com/ReGenNow/ReGenNexus.git
@@ -21,116 +24,127 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-### Docker Installation
-For containerized deployment, see the [Docker Deployment Guide](deployment/docker_core.md).
+### Installing with pip
 
-## Core Concepts
+```bash
+pip install regennexus
+```
 
-### 1. Messages
-Messages are the fundamental unit of communication in ReGenNexus UAP. Each message contains:
-- Sender and recipient identifiers
-- Content payload (text or structured data)
-- Intent (purpose of the message)
-- Context identifier (conversation grouping)
+## Basic Usage
 
-### 2. Entities
-Entities are the participants in the communication system. Each entity:
-- Has a unique identifier
-- Can process incoming messages
-- Can generate response messages
-- Implements application-specific logic
-
-### 3. Registry
-The registry manages all entities in the system:
-- Keeps track of available entities
-- Routes messages to the correct recipients
-- Handles entity registration and discovery
-
-### 4. Context
-The context manager maintains conversation state:
-- Groups related messages together
-- Provides conversation history
-- Manages conversation lifecycle
-
-## Quick Start Example
-
-Here's a simple example to get you started:
+### Creating a Simple Client
 
 ```python
 import asyncio
-from regennexus.protocol.protocol_core import Message, Entity
-from regennexus.registry.registry import Registry
-from regennexus.context.context_manager import ContextManager
-
-# Create a simple entity
-class SimpleEntity(Entity):
-    def __init__(self, entity_id, name):
-        super().__init__(entity_id)
-        self.name = name
-        
-    async def process_message(self, message, context):
-        print(f"{self.name} received: {message.content}")
-        return Message(
-            sender_id=self.id,
-            recipient_id=message.sender_id,
-            content=f"Response from {self.name}",
-            intent="response",
-            context_id=message.context_id
-        )
+from regennexus.protocol.client import UAP_Client
+from regennexus.protocol.message import UAP_Message
 
 async def main():
-    # Create registry and context manager
-    registry = Registry()
-    context_manager = ContextManager()
+    # Create a client
+    client = UAP_Client(entity_id="my_agent", registry_url="localhost:8000")
     
-    # Create and register entities
-    entity_a = SimpleEntity("entity-a", "Entity A")
-    entity_b = SimpleEntity("entity-b", "Entity B")
-    await registry.register_entity(entity_a)
-    await registry.register_entity(entity_b)
-    
-    # Create context
-    context = await context_manager.create_context()
+    # Connect to the registry
+    await client.connect()
     
     # Send a message
-    message = Message(
-        sender_id=entity_a.id,
-        recipient_id=entity_b.id,
-        content="Hello from Entity A!",
-        intent="greeting",
-        context_id=context.id
+    message = UAP_Message(
+        sender="my_agent",
+        recipient="target_device",
+        intent="command",
+        payload={"action": "turn_on", "parameters": {"device": "light"}}
     )
+    await client.send_message(message)
     
-    # Route the message
-    response = await registry.route_message(message)
-    if response:
-        await registry.route_message(response)
+    # Keep the client running
+    await client.run()
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-## Learning More
+### Handling Messages
 
-To deepen your understanding of the ReGenNexus UAP Core:
+```python
+# Register a message handler
+async def handle_message(message):
+    print(f"Received message: {message.payload}")
+    
+    # Respond to the message
+    if message.intent == "query":
+        response = UAP_Message(
+            sender=client.entity_id,
+            recipient=message.sender,
+            intent="response",
+            payload={"status": "success", "data": {"temperature": 22.5}},
+            context_id=message.context_id
+        )
+        await client.send_message(response)
 
-1. **Explore the Examples**: The `examples/` directory contains several working examples:
-   - `simple_connection/protocol_basics_tutorial.py`: Step-by-step introduction to core concepts
-   - `multi_agent/multi_entity_communication.py`: Multiple entity communication
-   - `patterns/event_driven_example.py`: Event-driven communication patterns
-   - `security/basic_security_example.py`: Authentication and encryption features
+client.register_message_handler(handle_message)
+```
 
-2. **Read the Documentation**: The `docs/` directory contains detailed documentation:
-   - `core_protocol.md`: Detailed protocol specification
-   - `deployment/docker_core.md`: Docker deployment guide
+## Running the Registry Server
 
-3. **Contribute**: See the `CONTRIBUTING.md` file for guidelines on contributing to the project.
+ReGenNexus Core includes a registry server that facilitates entity discovery and message routing:
 
-## Future Extensions
+```bash
+# Start the registry server
+python -m regennexus.registry.server --host 0.0.0.0 --port 8000
+```
 
-The ReGenNexus UAP Core is designed to be extensible. Future premium extensions will include:
-- Connection Manager for application integration
-- Device Detection Framework for hardware discovery
-- LLM Integration for intelligent adapter generation
+## Using Security Features
 
-These premium features will build upon the core protocol while maintaining compatibility.
+ReGenNexus Core includes robust security features:
+
+```python
+from regennexus.security.crypto import generate_keypair
+from regennexus.security.auth import create_certificate
+
+# Generate a keypair for secure communication
+private_key, public_key = generate_keypair()
+
+# Create a certificate for authentication
+certificate = create_certificate(
+    entity_id="my_agent",
+    public_key=public_key,
+    valid_days=365
+)
+
+# Create a secure client
+secure_client = UAP_Client(
+    entity_id="my_agent",
+    registry_url="localhost:8000",
+    private_key=private_key,
+    certificate=certificate
+)
+```
+
+## Working with Device Plugins
+
+ReGenNexus Core includes plugins for various devices:
+
+```python
+from regennexus.plugins.raspberry_pi import RaspberryPiPlugin
+
+# Create a Raspberry Pi plugin
+rpi_plugin = RaspberryPiPlugin()
+
+# Register the plugin with a client
+client.register_plugin(rpi_plugin)
+
+# Use the plugin
+gpio_status = await client.execute_plugin_action(
+    plugin_id="raspberry_pi",
+    action="read_gpio",
+    parameters={"pin": 18}
+)
+```
+
+## Next Steps
+
+- Explore the [examples directory](../examples/) for more detailed examples
+- Read the [API Reference](api_reference.md) for detailed documentation
+- Learn about [security features](security.md) for secure communication
+- Discover [device integration](device_integration.md) capabilities
+- Explore [ROS integration](ros_integration.md) for robotics applications
+- Learn about the [Azure Bridge](azure_bridge.md) for cloud connectivity

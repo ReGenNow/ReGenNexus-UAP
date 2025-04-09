@@ -1,4 +1,4 @@
-# ReGenNexus Core - Universal Agent Protocol
+# ReGenNexus Core
 
 ReGenNexus Core is an open-source implementation of the Universal Agent Protocol (UAP) developed by ReGen Designs LLC. It provides a standardized communication framework for digital entities to interact seamlessly.
 
@@ -7,7 +7,10 @@ ReGenNexus Core is an open-source implementation of the Universal Agent Protocol
 - **Message Protocol**: Standardized message format for entity communication
 - **Entity Registry**: Discovery and registration system for digital entities
 - **Context Management**: Conversation state and history tracking
-- **Basic Security**: Authentication and encryption for secure communication
+- **Enhanced Security**: End-to-end encryption with ECDH-384 and certificate-based authentication
+- **Device Integration**: Support for Raspberry Pi, Arduino, Jetson, and IoT devices
+- **ROS 2 Integration**: Bridge for Robot Operating System communication
+- **Azure IoT Bridge**: Standalone bridge for Azure IoT Hub connectivity
 
 ## Getting Started
 
@@ -29,53 +32,33 @@ pip install -e .
 
 ```python
 import asyncio
-from regennexus.protocol.protocol_core import Message, Entity
-from regennexus.registry.registry import Registry
-from regennexus.context.context_manager import ContextManager
-
-# Create a simple entity
-class SimpleEntity(Entity):
-    def __init__(self, entity_id, name):
-        super().__init__(entity_id)
-        self.name = name
-        
-    async def process_message(self, message, context):
-        print(f"{self.name} received: {message.content}")
-        return Message(
-            sender_id=self.id,
-            recipient_id=message.sender_id,
-            content=f"Response from {self.name}",
-            intent="response",
-            context_id=message.context_id
-        )
+from regennexus.protocol.client import UAP_Client
+from regennexus.protocol.message import UAP_Message
 
 async def main():
-    # Create registry and context manager
-    registry = Registry()
-    context_manager = ContextManager()
+    # Create a client
+    client = UAP_Client(entity_id="my_agent", registry_url="localhost:8000")
     
-    # Create and register entities
-    entity_a = SimpleEntity("entity-a", "Entity A")
-    entity_b = SimpleEntity("entity-b", "Entity B")
-    await registry.register_entity(entity_a)
-    await registry.register_entity(entity_b)
-    
-    # Create context
-    context = await context_manager.create_context()
+    # Connect to the registry
+    await client.connect()
     
     # Send a message
-    message = Message(
-        sender_id=entity_a.id,
-        recipient_id=entity_b.id,
-        content="Hello from Entity A!",
-        intent="greeting",
-        context_id=context.id
+    message = UAP_Message(
+        sender="my_agent",
+        recipient="target_device",
+        intent="command",
+        payload={"action": "turn_on", "parameters": {"device": "light"}}
     )
+    await client.send_message(message)
     
-    # Route the message
-    response = await registry.route_message(message)
-    if response:
-        await registry.route_message(response)
+    # Register a message handler
+    async def handle_message(message):
+        print(f"Received message: {message.payload}")
+    
+    client.register_message_handler(handle_message)
+    
+    # Keep the client running
+    await client.run()
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -83,19 +66,26 @@ if __name__ == "__main__":
 
 ## Documentation
 
-- [Getting Started Guide](docs/getting_started.md)
 - [Core Protocol Documentation](docs/core_protocol.md)
 - [API Reference](docs/api_reference.md)
-- [Containerization Guide](docs/containerization.md)
+- [Security Guide](docs/security.md)
+- [Device Integration](docs/device_integration.md)
+- [ROS Integration](docs/ros_integration.md)
+- [Azure Bridge](docs/azure_bridge.md)
+- [Docker Deployment](docs/docker_deployment.md)
+- [Core Addons](docs/CORE_ADDONS.md)
+- [Enhancement Summary](docs/ENHANCEMENT_SUMMARY.md)
+
 
 ## Examples
 
 The `examples/` directory contains several examples demonstrating different aspects of the protocol:
 
 - **Simple Connection**: Basic protocol usage and tutorial
-- **Multi-Agent**: Communication between multiple entities
-- **Patterns**: Event-driven communication patterns
 - **Security**: Authentication and encryption features
+- **Device Integration**: Working with Raspberry Pi, Arduino, and Jetson devices
+- **ROS Integration**: Connecting with Robot Operating System
+- **Patterns**: Event-driven communication patterns
 
 ## Docker Support
 
@@ -103,14 +93,14 @@ ReGenNexus Core includes Docker support for easy deployment:
 
 ```bash
 # Build and run with Docker Compose
-docker-compose -f docker-compose.core.yml up
+docker-compose up
 ```
 
-See the [Containerization Guide](docs/containerization.md) for more details.
+See the [Docker Deployment Guide](docs/docker_deployment.md) for more details.
 
 ## Contributing
 
-We welcome contributions to the ReGenNexus Core! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions to ReGenNexus Core! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## Roadmap
 

@@ -1,13 +1,32 @@
+#!/usr/bin/env python3
+"""
+ReGenNexus Core - Setup Script
+
+This script installs the ReGenNexus Core Universal Agent Protocol.
+"""
+
 from setuptools import setup, find_packages
+import os
+
+# Read requirements
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
+
+# Read README for long description
+with open('README.md', encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name="regennexus-core",
-    version="0.1.0",
-    description="ReGenNexus Universal Agent Protocol (UAP) Core",
-    author="ReGen Designs LLC",
-    author_email="info@regendesigns.com",
+    version="0.1.1",
+    description="ReGenNexus Core - Universal Agent Protocol",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    author="ReGenNow",
+    author_email="info@regennow.com",
     url="https://github.com/ReGenNow/ReGenNexus",
-    packages=find_packages(),
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
@@ -18,10 +37,36 @@ setup(
         "Programming Language :: Python :: 3.10",
     ],
     python_requires=">=3.8",
-    install_requires=[
-        "asyncio",
-        "pycryptodome",
-        "uuid",
-    ],
-    keywords="protocol, agent, communication, uap",
+    install_requires=requirements,
+    extras_require={
+        "raspberry_pi": [
+            "RPi.GPIO>=0.7.0",
+            "picamera>=1.13"
+        ],
+        "jetson": [
+            "jetson-stats>=3.1.0",
+            "Jetson.GPIO>=2.0.17"
+        ],
+        "ros": [
+            "rclpy>=1.0.0"
+        ],
+        "azure": [
+            "azure-iot-device>=2.12.0"
+        ],
+        "dev": [
+            "pytest>=7.0.0",
+            "pytest-asyncio>=0.18.0",
+            "black>=22.3.0",
+            "isort>=5.10.0",
+            "mypy>=0.950",
+            "sphinx>=4.5.0",
+            "sphinx-rtd-theme>=1.0.0"
+        ]
+    },
+    entry_points={
+        "console_scripts": [
+            "regennexus-registry=regennexus.registry.cli:main",
+            "regennexus-client=regennexus.protocol.cli:main",
+        ],
+    },
 )

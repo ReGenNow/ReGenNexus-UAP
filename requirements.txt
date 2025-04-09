@@ -1,3 +1,15 @@
 asyncio>=3.4.3
 pycryptodome>=3.15.0
 uuid>=1.30
+aiohttp>=3.8.1
+cryptography>=37.0.4
+pyOpenSSL>=22.0.0
+websockets>=10.3
+protobuf>=4.21.1
+grpcio>=1.46.3
+pyjwt>=2.4.0
+python-dateutil>=2.8.2
+pyserial>=3.5
+RPi.GPIO>=0.7.0; platform_machine=='armv7l' or platform_machine=='aarch64'
+picamera>=1.13; platform_machine=='armv7l' or platform_machine=='aarch64'
+asyncio-mqtt>=0.12.1
