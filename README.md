@@ -18,8 +18,8 @@ ReGenNexus Core is an open-source implementation of the Universal Agent Protocol
 
 Try ReGenNexus interactively in Google Colab:
 
-- [Basic Demo](https://colab.research.google.com/github/ReGenNow/ReGenNexus/blob/main/colab_basic_demo.ipynb) - Demonstrates core communication features between agents
-- [Security Demo](https://colab.research.google.com/github/ReGenNow/ReGenNexus/blob/main/colab_security_demo.ipynb) - Showcases enhanced security features including ECDH-384, certificates, and policy-based access control
+- [Basic Demo](https://colab.research.google.com/github/ReGenNow/ReGenNexus/blob/main/examples/binder/colab_basic_demo.ipynb) - Demonstrates core communication features between agents
+- [Security Demo](https://colab.research.google.com/github/ReGenNow/ReGenNexus/blob/main/examples/binder/colab_security_demo.ipynb) - Showcases enhanced security features including ECDH-384, certificates, and policy-based access control
 
 These notebooks allow you to experience ReGenNexus functionality without setting up anything locally.
 
