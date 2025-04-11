@@ -14,6 +14,15 @@ ReGenNexus Core is an open-source implementation of the Universal Agent Protocol
 - **ROS 2 Integration**: Bridge for Robot Operating System communication
 - **Azure IoT Bridge**: Standalone bridge for Azure IoT Hub connectivity
 
+## Interactive Demos
+
+Try ReGenNexus interactively in Google Colab:
+
+- [Basic Demo](https://colab.research.google.com/github/ReGenNow/ReGenNexus/blob/main/colab_basic_demo.ipynb) - Demonstrates core communication features between agents
+- [Security Demo](https://colab.research.google.com/github/ReGenNow/ReGenNexus/blob/main/colab_security_demo.ipynb) - Showcases enhanced security features including ECDH-384, certificates, and policy-based access control
+
+These notebooks allow you to experience ReGenNexus functionality without setting up anything locally.
+
 ## Getting Started
 
 ### Installation
@@ -68,6 +77,7 @@ if __name__ == "__main__":
 
 ## Documentation
 
+- [Getting Started Guide](docs/getting_started.md)
 - [Core Protocol Documentation](docs/core_protocol.md)
 - [API Reference](docs/api_reference.md)
 - [Security Guide](docs/security.md)
@@ -75,9 +85,6 @@ if __name__ == "__main__":
 - [ROS Integration](docs/ros_integration.md)
 - [Azure Bridge](docs/azure_bridge.md)
 - [Docker Deployment](docs/docker_deployment.md)
-- [Core Addons](docs/CORE_ADDONS.md)
-- [Enhancement Summary](docs/ENHANCEMENT_SUMMARY.md)
-
 
 ## Examples
 
