@@ -27,8 +27,25 @@ These notebooks allow you to experience ReGenNexus functionality without setting
 
 ### Installation
 
+### Standard Installation (Recommended for Users)
+
 ```bash
 # Clone the repository
+git clone https://github.com/ReGenNow/ReGenNexus.git
+
+cd ReGenNexus
+# Create a virtual environment 
+python3 -m venv venv
+source bot/bin/activate
+pip install .
+
+# Run the registry and client
+regennexus-registry  # Starts the server
+regennexus-client    # Runs the client
+```
+### Development Installation (For Contributors)
+
+```bash
 git clone https://github.com/ReGenNow/ReGenNexus.git
 cd ReGenNexus
 
@@ -37,6 +54,10 @@ pip install -r requirements.txt
 
 # Install in development mode
 pip install -e .
+
+# Run the registry and client
+regennexus-registry  # Starts the server
+regennexus-client    # Runs the client
 ```
 
 ### Quick Example
